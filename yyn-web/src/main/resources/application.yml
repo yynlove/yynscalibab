@@ -1,0 +1,30 @@
+# Nacos帮助文档: https://nacos.io/zh-cn/docs/concepts.html
+spring:
+  application:
+    name: yyn-web
+  # Nacos认证信息
+  cloud:
+    nacos:
+     discovery:
+       username: nacos
+       password: nacos
+       # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+       server-addr: 127.0.0.1:8848
+       # 注册到 nacos 的指定 namespace，默认为 public
+       namespace: public
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8090
+
+
+server :
+  port : 8089
+  servlet:
+    context-path: /yynweb
+
+# sentinel
+feign:
+  sentinel:
+    enabled: true
+
