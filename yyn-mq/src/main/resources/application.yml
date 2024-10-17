@@ -1,7 +1,7 @@
 ## Nacos帮助文档: https://nacos.io/zh-cn/docs/concepts.html
 #spring:
 #  application:
-#    name: yyn-service
+#    name: yyn-mq
 #  # 数据库设置
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,12 +20,12 @@
 #       namespace: public
 #    sentinel:
 #      transport:
-#        port: 8719
+#        port: 8722
 #        dashboard: localhost:8090
 #server :
-#  port : 12345
+#  port : 8090
 #  servlet:
-#    context-path: /yynservice
+#    context-path: /yynmq
 #
 #
 #
