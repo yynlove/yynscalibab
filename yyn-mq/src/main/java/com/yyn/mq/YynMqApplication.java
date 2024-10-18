@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-@MapperScan(value = "com.yyn.*")
+@MapperScan(value = "com.yyn.mapper.*")
 public class YynMqApplication {
 
     public static void main(String[] args) {

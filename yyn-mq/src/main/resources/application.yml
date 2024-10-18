@@ -11,23 +11,37 @@
 #  # Nacos认证信息
 #  cloud:
 #    nacos:
-#     discovery:
-#       username: nacos
-#       password: nacos
-#       # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
-#       server-addr: 127.0.0.1:8848
-#       # 注册到 nacos 的指定 namespace，默认为 public
-#       namespace: public
+#      discovery:
+#        username: nacos
+#        password: nacos
+#        # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+#        server-addr: 127.0.0.1:8848
+#        # 注册到 nacos 的指定 namespace，默认为 public
+#        namespace: public
 #    sentinel:
 #      transport:
 #        port: 8722
 #        dashboard: localhost:8090
+#    stream:
+#      rocketmq:
+#        binder:
+#          name-server: 192.168.195.128:9876  # RocketMQ NameServer 地址
+#      bindings:
+#        one-to-one-input:
+#          destination: one-to-one  # 主题
+#          contentType: application/json
+#          group: one-to-one-input
+#        one-to-one-output:
+#          destination: one-to-one  # 主题
+#          contentType: application/json
+#          group: one-to-one-output
+#
+#
+#
 #server :
-#  port : 8090
+#  port : 8085
 #  servlet:
 #    context-path: /yynmq
-#
-#
 #
 ## sentinel
 #feign:
