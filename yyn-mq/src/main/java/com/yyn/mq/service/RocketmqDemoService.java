@@ -16,4 +16,8 @@ public class RocketmqDemoService {
     public void sendOTO(String message) {
         yynProducer.sendOneToOneChannelMessage(message);
     }
+
+    public void sendOTM(String message) {
+        yynProducer.sendOneToManyChannelMessage(message);
+    }
 }

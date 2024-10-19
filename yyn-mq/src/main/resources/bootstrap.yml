@@ -11,3 +11,4 @@ spring:
         file-extension: yaml
         enabled: true
         refresh-enabled: true
+        prefix: ${spring.application.name}

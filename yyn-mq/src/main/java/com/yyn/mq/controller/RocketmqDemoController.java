@@ -19,4 +19,11 @@ public class RocketmqDemoController {
         rocketmqDemoService.sendOTO(message);
         return "sucess";
     }
+
+
+    @GetMapping(value = "/sendOTM/{message}")
+    public String sendOTM(@PathVariable("message") String message){
+        rocketmqDemoService.sendOTM(message);
+        return "one to many sucess";
+    }
 }
