@@ -1,5 +1,6 @@
 package com.yyn.mq.service;
 
+import com.yyn.mq.entity.OrderItem;
 import com.yyn.mq.stream.YynProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,14 @@ public class RocketmqDemoService {
 
     public void sendOTM(String message) {
         yynProducer.sendOneToManyChannelMessage(message);
+    }
+
+    public void sendOTOOrder(String message) {
+
+        for (int i = 0;i<3;i++){
+            OrderItem orderItem = new OrderItem(i, message + 1);
+            yynProducer.sendOneToOneOrderChannelMessage(orderItem);
+        }
+
     }
 }

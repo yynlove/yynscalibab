@@ -26,4 +26,12 @@ public class RocketmqDemoController {
         rocketmqDemoService.sendOTM(message);
         return "one to many sucess";
     }
+
+
+    @GetMapping(value = "/sendOTOOrder/{message}")
+    public String sendOTOOrder(@PathVariable("message") String message){
+        rocketmqDemoService.sendOTOOrder(message);
+        return "one to one order sucess";
+    }
+
 }

@@ -5,3 +5,58 @@
 - spring.profiles.active 改为 spring.config.activate.on-profile
 # 2、sentinel 客户端
     java -Dserver.port=8090 -Dcsp.sentinel.dashboard.server=localhost:8090 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar
+
+# RocketMQ
+## 普通消息
+```yaml
+      bindings:
+        one-to-one-input:
+          destination: one-to-one  # 主题
+          contentType: application/json
+          group: one-to-one-cus-group # 消费者分组
+          consumer:
+            max-attempts: 1   # 最大重试次数
+
+      rocketmq:
+        bindings:
+          one-to-one-input:
+            consumer:
+              enabled: true # 是否开启消费，默认为 true
+          one-to-one-output:
+            producer:
+              group: test # 生产者分组
+              sync: true # 是否同步发送消息，默认为 false 异步。              
+              delay-level-when-next-consume: -1 # 异步消费消息模式下消费失败重试策略，默认为 brocker 0  1-consumer控制 -1 直接进入死信
+```
+## 消息广播
+```yaml
+      rocketmq:
+        bindings:
+          one-to-many-input:
+            consumer:
+              enabled: true # 是否开启消费，默认为 true
+              messageModel: BROADCASTING  # 将消费模式改为广播模式
+```
+
+## 顺序消息消费
+```yaml
+    stream:
+      bindings:
+        one-to-one-order-output:
+          destination: one-to-one-order  # 顺序消费
+          contentType: application/json
+          producer:
+            partition-key-expression: payload['id'] # 分区 key 表达式。该表达式基于 Spring EL，从消息中获得分区 key。
+      
+    rocketmq:
+      binder:
+        one-to-one-order-input:
+          consumer:
+            enabled: true # 是否开启消费，默认为 true
+        one-to-one-order-output:
+          producer:
+            group: test-order # 生产者分组
+            sync: false # 是否同步发送消息，默认为 false 异步。
+            orderly: true # 启用顺序消息
+
+```

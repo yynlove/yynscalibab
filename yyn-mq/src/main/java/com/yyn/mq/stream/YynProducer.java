@@ -1,5 +1,6 @@
 package com.yyn.mq.stream;
 
+import com.yyn.mq.entity.OrderItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,13 @@ public class YynProducer {
                 .build();
         yynChannelBinder.sendOneToManyChannel().send(build);
 
+    }
+
+    public void sendOneToOneOrderChannelMessage(OrderItem orderItem) {
+
+        log.info("YynProducer sendOneToOneOrderChannelMessage {}",orderItem);
+        Message<OrderItem> build = MessageBuilder.withPayload(orderItem)
+                .build();
+        yynChannelBinder.sendOneToOneOrderChannel().send(build);
     }
 }

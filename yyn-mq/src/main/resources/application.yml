@@ -23,18 +23,42 @@
 #        port: 8722
 #        dashboard: localhost:8090
 #    stream:
-#      rocketmq:
-#        binder:
-#          name-server: 192.168.195.128:9876  # RocketMQ NameServer 地址
 #      bindings:
 #        one-to-one-input:
 #          destination: one-to-one  # 主题
 #          contentType: application/json
-#          group: one-to-one-input
+#          group: one-to-one-cus-group # 消费者分组
+#          consumer:
+#            max-attempts: 1   # 最大重试次数
 #        one-to-one-output:
 #          destination: one-to-one  # 主题
 #          contentType: application/json
-#          group: one-to-one-output
+#        one-to-many-input:
+#          destination: one-to-many  # 主题
+#          contentType: application/json
+#          group: one-to-many-cus-group # 消费者分组
+#        one-to-many-output:
+#          destination: one-to-many  # 主题
+#          contentType: application/json
+#
+#      rocketmq:
+#        binder:
+#          name-server: 192.168.195.128:9876  # RocketMQ NameServer 地址
+#        bindings:
+#          one-to-one-input:
+#            consumer:
+#              enabled: true # 是否开启消费，默认为 true
+#              broadcasting: false # 是否使用广播消费，默认为 false 使用集群消费
+#          one-to-one-output:
+#            producer:
+#              group: test # 生产者分组
+#              sync: true # 是否同步发送消息，默认为 false 异步。
+#              delay-level-when-next-consume: -1 # 异步消费消息模式下消费失败重试策略，默认为 brocker 0  1-consumer控制 -1 直接进入死信
+#          one-to-many-input:
+#            consumer:
+#              enabled: true # 是否开启消费，默认为 true
+#              messageModel: BROADCASTING  # 将消费模式改为广播模式
+#
 #
 #
 #
