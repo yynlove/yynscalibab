@@ -33,7 +33,7 @@ public class YynConsumer {
     }
 
 
-    @StreamListener(YynChannelBinder.ONE_TO_ONE_ORDER_INPUT)
+    @StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['rocketmq_TAGS'] == 'yuan'")
     public void receiveOTOOrder(String messageBody) {
         log.info("[ONE_TO_ONE_ORDER_INPUT][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
     }

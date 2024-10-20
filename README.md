@@ -46,7 +46,7 @@
           destination: one-to-one-order  # 顺序消费
           contentType: application/json
           producer:
-            partition-key-expression: payload['id'] # 分区 key 表达式。该表达式基于 Spring EL，从消息中获得分区 key。
+            partition-key-expression: headers['orderId'] # 分区 key 表达式。该表达式基于 Spring EL，从消息中获得分区 key。
       
     rocketmq:
       binder:
@@ -60,3 +60,20 @@
             orderly: true # 启用顺序消息
 
 ```
+
+
+## 消息过滤
+
+### 基于 Tag 过滤
+```java
+//setHeader(MessageConst.PROPERTY_TAGS, tag); 不生效
+//生产者
+setHeader("rocketmq_TAGS", "tag");
+//消费者
+@StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['rocketmq_TAGS'] == 'tag'");
+
+```
+```yaml
+```
+
+## 事务消息

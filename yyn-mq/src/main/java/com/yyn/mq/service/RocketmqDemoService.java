@@ -25,7 +25,8 @@ public class RocketmqDemoService {
     public void sendOTOOrder(String message) {
 
         for (int i = 0;i<3;i++){
-            OrderItem orderItem = new OrderItem(i, message + 1);
+            OrderItem orderItem = new OrderItem(i, message);
+
             yynProducer.sendOneToOneOrderChannelMessage(orderItem);
         }
 

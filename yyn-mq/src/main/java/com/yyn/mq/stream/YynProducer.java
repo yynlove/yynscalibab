@@ -1,5 +1,6 @@
 package com.yyn.mq.stream;
 
+import com.alibaba.fastjson.JSON;
 import com.yyn.mq.entity.OrderItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageConst;
@@ -40,9 +41,12 @@ public class YynProducer {
 
     public void sendOneToOneOrderChannelMessage(OrderItem orderItem) {
 
-        log.info("YynProducer sendOneToOneOrderChannelMessage {}",orderItem);
+
         Message<OrderItem> build = MessageBuilder.withPayload(orderItem)
+//                .setHeader("orderId", orderItem.getId())
+                .setHeader("rocketmq_TAGS", orderItem.getMessage())
                 .build();
+        log.info("YynProducer sendOneToOneOrderChannelMessage {}", JSON.toJSON(build));
         yynChannelBinder.sendOneToOneOrderChannel().send(build);
     }
 }
