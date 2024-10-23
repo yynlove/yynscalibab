@@ -1,6 +1,6 @@
 package com.yyn.mq.controller;
 
-import com.yyn.mq.service.RocketmqDemoService;
+import com.yyn.mq.service.rocketdemo.RocketmqDemoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +32,13 @@ public class RocketmqDemoController {
     public String sendOTOOrder(@PathVariable("message") String message){
         rocketmqDemoService.sendOTOOrder(message);
         return "one to one order sucess";
+    }
+
+
+    @GetMapping(value = "/sendOTOTrans/{message}")
+    public String sendOTOTrans(@PathVariable("message") String message){
+        rocketmqDemoService.sendOTOTrans(message);
+        return "one to one tans sucess";
     }
 
 }

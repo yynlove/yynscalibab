@@ -12,7 +12,7 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-@MapperScan(value = "com.yyn.mapper.*")
+@MapperScan(value = "com.yyn.mq.mapper")
 @EnableBinding({YynChannelBinder.class})
 public class YynMqApplication {
 

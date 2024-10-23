@@ -45,7 +45,16 @@ public interface YynChannelBinder {
     MessageChannel receiveOneToOneOrder();
 
 
+    /**
+     * 事务消息
+     */
+    String one_to_one_trans_OUTPUT = "one-to-one-trans-output";
+    String one_to_one_trans_INPUT = "one-to-one-trans-input";
 
+    @Output(one_to_one_trans_OUTPUT)
+    MessageChannel sendOneToOneTransChannel();
+    @Input(one_to_one_trans_INPUT)
+    MessageChannel receiveOneToOneTrans();
 
 
 }

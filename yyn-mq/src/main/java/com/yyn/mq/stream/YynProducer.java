@@ -2,6 +2,7 @@ package com.yyn.mq.stream;
 
 import com.alibaba.fastjson.JSON;
 import com.yyn.mq.entity.OrderItem;
+import com.yyn.mq.entity.Table1;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,21 @@ public class YynProducer {
 
         Message<OrderItem> build = MessageBuilder.withPayload(orderItem)
 //                .setHeader("orderId", orderItem.getId())
-                .setHeader("rocketmq_TAGS", orderItem.getMessage())
+//                .setHeader("rocketmq_TAGS", orderItem.getMessage())
+                .setHeader(MessageConst.PROPERTY_TAGS, orderItem.getMessage())
                 .build();
         log.info("YynProducer sendOneToOneOrderChannelMessage {}", JSON.toJSON(build));
         yynChannelBinder.sendOneToOneOrderChannel().send(build);
+    }
+
+    public void sendOTOTrans(Table1 table1) {
+        String jsonString = JSON.toJSONString(table1);
+        Message<Table1> springMessage = MessageBuilder.withPayload(table1)
+                .setHeader("args", jsonString) // <X>
+                .build();
+        // 发送消息
+        log.info("--------1 发消息");
+        yynChannelBinder.sendOneToOneTransChannel().send(springMessage);
+
     }
 }

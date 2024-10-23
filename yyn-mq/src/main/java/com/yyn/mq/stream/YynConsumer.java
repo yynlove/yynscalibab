@@ -33,10 +33,25 @@ public class YynConsumer {
     }
 
 
-    @StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['rocketmq_TAGS'] == 'yuan'")
-    public void receiveOTOOrder(String messageBody) {
-        log.info("[ONE_TO_ONE_ORDER_INPUT][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
+//    @StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['rocketmq_TAGS'] == 'yuan'")
+//    public void receiveOTOOrder(String messageBody) {
+//        log.info("[ONE_TO_ONE_ORDER_INPUT][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
+//    }
+
+
+    @StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT)
+    public void receiveOTOOrderOne(String messageBody) {
+        log.info("[one ][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
     }
+
+    @StreamListener(value = YynChannelBinder.one_to_one_trans_INPUT)
+    public void receiveOTOTrans(String messageBody) {
+        log.info("[receiveOTOTrans ][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
+    }
+
+
+
+
 
 
 
