@@ -203,7 +203,9 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
 
 - 异步提交： 消费者在消费完一批消息后向broker提交offset，但无需等待Broker的成功响应，可以继续读取并消费下一批消息。这种方式增加了消费者的吞吐量。但需要注意，broker在收到提交的offset后，还是会向消费者进行响应的。可能还没有收到ACK，此时Consumer会从Broker中直接获取nextBeginOffset。
 
-## 普通消息
+## spring-cloud配置
+
+### 普通消息
 
 ```yaml
       bindings:
@@ -226,7 +228,7 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
               delay-level-when-next-consume: -1 # 异步消费消息模式下消费失败重试策略，默认为 brocker 0  1-consumer控制 -1 直接进入死信
 ```
 
-## 消息广播
+### 消息广播
 
 ```yaml
       rocketmq:
@@ -237,7 +239,7 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
               messageModel: BROADCASTING  # 将消费模式改为广播模式
 ```
 
-## 顺序消息消费
+### 顺序消息消费
 
 ```yaml
     stream:
@@ -260,9 +262,9 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
             orderly: true # 启用顺序消息
 ```
 
-## 消息过滤
+### 消息过滤
 
-### 基于 Tag 过滤
+#### 基于 Tag 过滤
 
 ```java
 //setHeader(MessageConst.PROPERTY_TAGS, tag); 不生效
@@ -276,4 +278,4 @@ setHeader("rocketmq_TAGS", "tag");
 
 ```
 
-## 事务消息
+### 事务消息
