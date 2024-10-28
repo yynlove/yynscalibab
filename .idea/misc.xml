@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/yyn-geteway/pom.xml" />
         <option value="$PROJECT_DIR$/yyn-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/yyn-mq/pom.xml" />
+        <option value="$PROJECT_DIR$/yyn-kafka/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -1,0 +1,66 @@
+# Nacos帮助文档: https://nacos.io/zh-cn/docs/concepts.html
+spring:
+  application:
+    name: yyn-kafka
+  # 数据库设置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yyn_dev?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+  # Nacos认证信息
+  cloud:
+    nacos:
+     discovery:
+       username: nacos
+       password: nacos
+       # Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+       server-addr: 127.0.0.1:8848
+       # 注册到 nacos 的指定 namespace，默认为 public
+       namespace: public
+    sentinel:
+      transport:
+        port: 8726
+        dashboard: localhost:8090
+server :
+  port : 8087
+  servlet:
+    context-path: /yynkafka
+
+
+
+  kafka:
+    bootstrap-servers: 192.168.195.128:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      default-topic: my-topic
+
+
+
+
+
+
+
+
+
+
+
+# sentinel
+feign:
+  sentinel:
+    enabled: true
+
+
+
+# mybatis-plu设置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml #扫描的xml文件路径
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台日志输出
