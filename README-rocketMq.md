@@ -6,23 +6,23 @@
 
 ### 消息（Message）
 
-        消息系统所传输信息的物理载体，生产和消费数据的最小单位，每条消息必须属于一个主 题。
+消息系统所传输信息的物理载体，生产和消费数据的最小单位，每条消息必须属于一个主题。
 
 ### 主题（Topic）
 
-         一个生产者可以同时发送多种Topic的消息；而一个消费者只对某种特定的Topic感兴趣，即只可以订阅 和消费一种Topic的消息。 producer:topic 1:n consumer:topic 1:1
+ 一个生产者可以同时发送多种Topic的消息；而一个消费者只对某种特定的Topic感兴趣，即只可以订阅 和消费一种Topic的消息。 producer:topic 1:n consumer:topic 1:1
 
 ### 标签 (tag)
 
-        消息设置的标签，用于同一主题下区分不同类型的消息。
+消息设置的标签，用于同一主题下区分不同类型的消息。
 
 ### 队列
 
-        存储消息的物理实体。一个Topic中可以包含多个Queue，每个Queue中存放的就是该Topic的消息。一  个Topic的Queue也被称为一个Topic中消息的分区（Partition）。  一个Topic的Queue中的消息只能被一个消费者组中的一个消费者消费。一个Queue中的消息不允许同 一个消费者组中的多个消费者同时消费。
+存储消息的物理实体。一个Topic中可以包含多个Queue，每个Queue中存放的就是该Topic的消息。一  个Topic的Queue也被称为一个Topic中消息的分区（Partition）。  一个Topic的Queue中的消息只能被一个消费者组中的一个消费者消费。一个Queue中的消息不允许同 一个消费者组中的多个消费者同时消费。
 
 ### 分片（Sharding）
 
-        分片不同于分区。在RocketMQ  中，分片指的是存放相应Topic的Broker。每个分片中会创建出相应数量的分区，即Queue，每个Queue的大小都是相同的。
+分片不同于分区。在RocketMQ  中，分片指的是存放相应Topic的Broker。每个分片中会创建出相应数量的分区，即Queue，每个Queue的大小都是相同的。
 
 ### 消息标识（MessageId/Key）
 
@@ -98,7 +98,7 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
 
 #### 消息写入
 
-    一条消息进入到Broker后经历了以下几个过程才最终被持久化：
+一条消息进入到Broker后经历了以下几个过程才最终被持久化：
 
 1. Broker根据queueId，获取到该消息对应索引条目要在consumequeue目录中的写入偏移量，即 QueueOffset
 
@@ -135,7 +135,7 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
 
 ### key查询
 
-    store目录中的index子目录中的indexFile进行索引实现的快速查询。当然，这个indexFile中的索引数据是在包含了key的消息被发送到Broker时写入的。如果消息中没有包含key，则不会写入;
+store目录中的index子目录中的indexFile进行索引实现的快速查询。当然，这个indexFile中的索引数据是在包含了key的消息被发送到Broker时写入的。如果消息中没有包含key，则不会写入;
 
 ## 消息消费
 
@@ -155,7 +155,7 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
 
 ### Rebalance机制
 
-        Rebalance即再均衡，指的是，将⼀个Topic下的多个Queue在同⼀个Consumer Group中的多个Consumer间进行重新分配的过程。
+Rebalance即再均衡，指的是，将⼀个Topic下的多个Queue在同⼀个Consumer Group中的多个Consumer间进行重新分配的过程。
 
 #### 消费危害
 
@@ -167,37 +167,37 @@ RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标
 
 ### 消费成功
 
-    RocketMQ有一个原则：每条消息必须要被成功消费一次。
+RocketMQ有一个原则：每条消息必须要被成功消费一次。
 
-    那么什么是成功消费呢？Consumer在消费完消息后会向其消费进度记录器提交其消费消息的offset，offset被成功记录到记录器中，那么这条消费就被成功消费了。
+那么什么是成功消费呢？Consumer在消费完消息后会向其消费进度记录器提交其消费消息的offset，offset被成功记录到记录器中，那么这条消费就被成功消费了。
 
 ### 订阅关系的一致型
 
-    订阅关系的一致性指的是，同一个消费者组（Group ID相同）下所有Consumer实例所订阅的Topic与Tag及对消息的处理逻辑必须完全一致。否则，消息消费的逻辑就会混乱，甚至导致消息丢失。
+订阅关系的一致性指的是，同一个消费者组（Group ID相同）下所有Consumer实例所订阅的Topic与Tag及对消息的处理逻辑必须完全一致。否则，消息消费的逻辑就会混乱，甚至导致消息丢失。
 
 ### Consumer的消费进度offset
 
 #### offset 本地管理模式
 
-    当消费模式为广播消费时，offset使用本地模式存储。因为每条消息会被所有的消费者消费，每个消费者管理自己的消费进度，各个消费者之间不存在消费进度的交集。
+当消费模式为广播消费时，offset使用本地模式存储。因为每条消息会被所有的消费者消费，每个消费者管理自己的消费进度，各个消费者之间不存在消费进度的交集。
 
 #### offset 远程管理模式
 
-    当消费模式为集群消费时，offset使用远程模式管理。因为所有Cosnumer实例对消息采用的是均衡消费，所有Consumer共享Queue的消费进度。
+当消费模式为集群消费时，offset使用远程模式管理。因为所有Cosnumer实例对消息采用的是均衡消费，所有Consumer共享Queue的消费进度。
 
-    Consumer在集群消费模式下offset相关数据以json的形式持久化到Broker磁盘文件中，文件路径为当前用户主目录下的store/config/consumerOffset.json 。
+Consumer在集群消费模式下offset相关数据以json的形式持久化到Broker磁盘文件中，文件路径为当前用户主目录下的store/config/consumerOffset.json 。
 
-    Broker启动时会加载这个文件，并写入到一个双层Map（ConsumerOffsetManager）。外层map的key为topic@group，value为内层map。内层map的key为queueId，value为offset。当发生Rebalance时， 新的Consumer会从该Map中获取到相应的数据来继续消费。
+Broker启动时会加载这个文件，并写入到一个双层Map（ConsumerOffsetManager）。外层map的key为topic@group，value为内层map。内层map的key为queueId，value为offset。当发生Rebalance时， 新的Consumer会从该Map中获取到相应的数据来继续消费。
 
-    集群模式下offset采用远程管理模式，主要是为了保证Rebalance机制。    
+集群模式下offset采用远程管理模式，主要是为了保证Rebalance机制。
 
-    当消费完一批消息后，Consumer会提交其消费进度offset给Broker，Broker在收到消费进度后会将其更新到那个双层Map（ConsumerOffsetManager）及consumerOffset.json文件中，然后向该Consumer进行ACK，而ACK内容中包含三项数据：当前消费队列的最小offset（minOffset）、最大offset（maxOffset）、及下次消费的起始offset（nextBeginOffset）。
+当消费完一批消息后，Consumer会提交其消费进度offset给Broker，Broker在收到消费进度后会将其更新到那个双层Map（ConsumerOffsetManager）及consumerOffset.json文件中，然后向该Consumer进行ACK，而ACK内容中包含三项数据：当前消费队列的最小offset（minOffset）、最大offset（maxOffset）、及下次消费的起始offset（nextBeginOffset）。
 
-    当rocketMQ对消息的消费出现异常时，会将发生异常的消息的offset提交到Broker中的重试队列。系统在发生消息消费异常时会为当前的topic@group创建一个重试队列，该队列以%RETRY%开头，到达重试时间后进行消费重试。
+当rocketMQ对消息的消费出现异常时，会将发生异常的消息的offset提交到Broker中的重试队列。系统在发生消息消费异常时会为当前的topic@group创建一个重试队列，该队列以%RETRY%开头，到达重试时间后进行消费重试。
 
 #### offset的同步提交与异步提交
 
-       集群消费模式下，Consumer消费完消息后会向Broker提交消费进度offset，其提交方式分为两种：
+集群消费模式下，Consumer消费完消息后会向Broker提交消费进度offset，其提交方式分为两种：
 
 - 同步提交： 消费者在消费完一批消息后会向broker提交这些消息的offset，然后等待broker的成功响应。若在等待超时之前收到了成功响应，则继续读取下一批消息进行消费（从ACK中获取nextBeginOffset）。若没有收到响应，则会重新提交，直到获取到响应。而在这个等待过程中，消费者是阻塞的。其严重影响了消费者的吞吐量。
 
