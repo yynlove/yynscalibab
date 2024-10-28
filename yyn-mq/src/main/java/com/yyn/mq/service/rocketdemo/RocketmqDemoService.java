@@ -43,6 +43,7 @@ public class RocketmqDemoService {
         table1.setTest1(message + "开始发消息");
         String transactionId = UUID.randomUUID().toString();
         table1.setTest4(transactionId);
+        //发送消息
         yynProducer.sendOTOTrans(table1);
         System.out.println(" sendOTOTrans 消息发送成功");
     }

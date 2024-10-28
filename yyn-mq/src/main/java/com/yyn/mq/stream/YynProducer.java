@@ -48,7 +48,7 @@ public class YynProducer {
         Message<OrderItem> build = MessageBuilder.withPayload(orderItem)
 //                .setHeader("orderId", orderItem.getId())
 //                .setHeader("rocketmq_TAGS", orderItem.getMessage())
-                .setHeader(MessageConst.PROPERTY_TAGS, orderItem.getMessage())
+                .setHeader(MessageConst.PROPERTY_TAGS, orderItem.getMessage())  //基于标签过滤
                 .build();
         log.info("YynProducer sendOneToOneOrderChannelMessage {}", JSON.toJSON(build));
         yynChannelBinder.sendOneToOneOrderChannel().send(build);
@@ -56,7 +56,6 @@ public class YynProducer {
 
     public void sendOTOTrans(Table1 table1) {
         String jsonString = JSON.toJSONString(table1);
-
         Message<Table1> springMessage = MessageBuilder.withPayload(table1)
                 .setHeader("TRANSACTION_ID", table1.getTest4())
                 .setHeader("args", jsonString) // <X>

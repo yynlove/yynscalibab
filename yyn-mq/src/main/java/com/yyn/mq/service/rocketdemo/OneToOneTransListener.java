@@ -22,7 +22,6 @@ public class OneToOneTransListener implements TransactionListener {
 
     @Resource
     private Table1Service table1Service;
-
     @Override
     public LocalTransactionState executeLocalTransaction(Message message, Object o) {
         Map<String, String> headers = message.getProperties();

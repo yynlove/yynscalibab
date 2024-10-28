@@ -264,18 +264,125 @@ Broker启动时会加载这个文件，并写入到一个双层Map（ConsumerOff
 
 ### 消息过滤
 
-#### 基于 Tag 过滤
 
-```java
-//setHeader(MessageConst.PROPERTY_TAGS, tag); 不生效
+
+1. 基于header过滤
+```
 //生产者
-setHeader("rocketmq_TAGS", "tag");
+setHeader("key", "tag");
 //消费者
-@StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['rocketmq_TAGS'] == 'tag'");
+@StreamListener(value = YynChannelBinder.ONE_TO_ONE_ORDER_INPUT,condition = "headers['key'] == 'tag'");
 ```
 
+2. 基于tag | sql 过滤
+```
+setHeader(MessageConst.PROPERTY_TAGS, orderItem.getMessage())
+```
 ```yaml
-
+  one-to-one-order-input:
+    consumer:
+      enabled: true # 是否开启消费，默认为 true
+      subscription:  yuan || a   # 基于 tag 标签
+      # sql: # 基于 SQL 订阅，默认为空
 ```
 
 ### 事务消息
+
+#### 原理
+
+[事务消息文档](https://cloud.tencent.com/document/product/1493/61585)
+
+1. 本地事务处理主要在步骤3；
+2. 保证本地事务和消息发送 最终一致性
+
+#### 生产者配置
+
+1. yml配置
+```yaml
+      rocketmq:
+        bindings:
+          one-to-one-trans-output:
+            producer:
+              group: one-to-one-trans-group # 生产者分组
+              producerType: Trans   # 事务消息
+              sync: true # 是否同步发送消息，默认为 false 异步。
+              transactionListener: oneToOneTransListener     # 事务监听器配置  
+      stream:
+        bindings:
+          one-to-one-trans-output:
+            destination: one-to-one-trans    
+            contentType: application/json     
+```
+2. java代码
+
+```java
+@Slf4j
+@Service
+public class RocketmqDemoService {
+    public void sendOTOTrans(String message) {
+        //不做业务处理
+        Table1 table1 = new Table1();
+        table1.setTest1(message + "开始发消息");
+        String transactionId = UUID.randomUUID().toString();
+        table1.setTest4(transactionId);
+
+        String jsonString = JSON.toJSONString(table1);
+        Message<Table1> springMessage = MessageBuilder.withPayload(table1)
+                .setHeader("TRANSACTION_ID", table1.getTest4())
+                .setHeader("args", jsonString) // 
+                .build();
+        //发送消息
+        log.info("sendOTOTrans {}", table1.getTest4());
+        yynChannelBinder.sendOneToOneTransChannel().send(springMessage);
+    }
+}
+
+//监听器
+@Slf4j
+@Component
+public class OneToOneTransListener implements TransactionListener {
+
+    @Resource
+    private Table1Service table1Service;
+    @Override
+    public LocalTransactionState executeLocalTransaction(Message message, Object o) {
+        Map<String, String> headers = message.getProperties();
+        String transactionId = headers.get("TRANSACTION_ID");
+        String s = headers.get("args");
+        log.info("executeLocalTransaction transactionId {} args {}",transactionId,s);
+        try {
+            //处理业务 模拟事务提交或回滚
+            table1Service.transSave(s);
+            return LocalTransactionState.COMMIT_MESSAGE;
+        }catch (Exception e){
+            return LocalTransactionState.ROLLBACK_MESSAGE;
+        }
+    }
+
+    @Override
+    public LocalTransactionState checkLocalTransaction(MessageExt messageExt) {
+        log.info("LocalTransactionState {}",JSON.toJSON(messageExt));
+        Map<String, String> headers = messageExt.getProperties();
+        String transactionId = headers.get("TRANSACTION_ID");
+        //查询处理结果 决定回滚 还是发送消息
+        LambdaQueryWrapper<Table1> eq = new QueryWrapper<Table1>().lambda().eq(Table1::getTest4, transactionId);
+        int count = this.table1Service.count(eq);
+        if(count>0){
+            return LocalTransactionState.COMMIT_MESSAGE;
+        }
+        return LocalTransactionState.ROLLBACK_MESSAGE;
+    }
+}
+
+```
+
+3. 消费者
+
+```yaml
+    stream:
+      bindings:
+        one-to-one-trans-input:
+          destination: one-to-one-trans
+          contentType: application/json
+          group: one-to-one-trans-cus-group # 消费者分组
+```
