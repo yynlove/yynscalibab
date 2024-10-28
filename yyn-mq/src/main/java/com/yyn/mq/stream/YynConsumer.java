@@ -1,6 +1,9 @@
 package com.yyn.mq.stream;
 
+import com.alibaba.fastjson.JSON;
 import com.yyn.mq.entity.OrderItem;
+import com.yyn.mq.entity.Table1;
+import com.yyn.mq.service.Table1Service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +14,9 @@ import org.springframework.integration.context.IntegrationContextUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.ErrorMessage;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 @Component
 @Slf4j
@@ -19,6 +25,9 @@ public class YynConsumer {
 
     @Value("${server.port}")
     private String port;
+
+    @Resource
+    private Table1Service table1Service;
 
     @StreamListener(YynChannelBinder.ONE_TO_ONE_INPUT)
     public void receive(String messageBody) {
@@ -45,8 +54,12 @@ public class YynConsumer {
     }
 
     @StreamListener(value = YynChannelBinder.one_to_one_trans_INPUT)
+    @Transactional
     public void receiveOTOTrans(String messageBody) {
         log.info("[receiveOTOTrans ][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), messageBody);
+        Table1 table1 = JSON.parseObject(messageBody, Table1.class);
+        table1.setTest3("消费成功");
+        table1Service.save(table1);
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,20 +32,18 @@ public class RocketmqDemoService {
 
         for (int i = 0;i<3;i++){
             OrderItem orderItem = new OrderItem(i, message);
-
             yynProducer.sendOneToOneOrderChannelMessage(orderItem);
         }
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void sendOTOTrans(String message) {
+        //不做业务处理
         Table1 table1 = new Table1();
-        table1.setTest1(message);
-        table1Service.save(table1);
-        log.info("--------1 写库");
+        table1.setTest1(message + "开始发消息");
+        String transactionId = UUID.randomUUID().toString();
+        table1.setTest4(transactionId);
         yynProducer.sendOTOTrans(table1);
-
         System.out.println(" sendOTOTrans 消息发送成功");
     }
 }

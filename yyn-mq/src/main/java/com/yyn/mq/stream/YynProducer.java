@@ -12,6 +12,7 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -19,6 +20,7 @@ public class YynProducer {
 
     @Autowired
     private YynChannelBinder yynChannelBinder;
+
 
 
     public void sendOneToOneChannelMessage(String message) {
@@ -54,11 +56,13 @@ public class YynProducer {
 
     public void sendOTOTrans(Table1 table1) {
         String jsonString = JSON.toJSONString(table1);
+
         Message<Table1> springMessage = MessageBuilder.withPayload(table1)
+                .setHeader("TRANSACTION_ID", table1.getTest4())
                 .setHeader("args", jsonString) // <X>
                 .build();
         // 发送消息
-        log.info("--------1 发消息");
+        log.info("sendOTOTrans {}",table1.getTest4());
         yynChannelBinder.sendOneToOneTransChannel().send(springMessage);
 
     }
