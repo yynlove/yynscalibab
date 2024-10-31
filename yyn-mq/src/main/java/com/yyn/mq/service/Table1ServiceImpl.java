@@ -17,6 +17,6 @@ public class Table1ServiceImpl extends ServiceImpl<Table1Mapper, Table1>  implem
         Table1 table1 = JSON.parseObject(s, Table1.class);
         table1.setTest2("处理业务逻辑");
         this.save(table1);
-        int i = 1 % 0;
+//        int i = 1 % 0;
     }
 }

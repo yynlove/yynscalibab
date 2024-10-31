@@ -11,4 +11,5 @@ spring:
         file-extension: yaml
         enabled: true
         refresh-enabled: true
-        prefix: ${spring.application.name}
+#  注意：一定一定要保证
+#  DataId == {spring.application.name}-{spring.profiles.active}.{spring.cloud.nacos.config.file-extension}

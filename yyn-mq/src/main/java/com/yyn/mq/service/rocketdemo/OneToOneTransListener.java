@@ -47,7 +47,7 @@ public class OneToOneTransListener implements TransactionListener {
         if(count>0){
             return LocalTransactionState.COMMIT_MESSAGE;
         }
-
+        log.info("transactionId {} 回滚",transactionId);
         return LocalTransactionState.ROLLBACK_MESSAGE;
     }
 }
