@@ -11,14 +11,16 @@ spring:
         file-extension: yaml
         enabled: true
         refresh-enabled: true
-#        prefix: ${spring.application.name}
         extension-configs: # 指定多个 Data ID 文件
           - data-id: yyn-mq-config.yaml
-            group: DEFAULT_GROUP
-            refresh: true
-          - data-id: yyn-mq-db.yaml
-            group: DEFAULT_GROUP
             refresh: true
           - data-id: yyn-mq-rocketmq.yaml
-            group: DEFAULT_GROUP
             refresh: true
+        shared-configs:  # 共享配置
+          - data-id: shared-db-config.yaml
+            refresh: true
+          - data-id: shared-nacos.yaml
+            refresh: true
+          - data-id: shared-sentinel.yaml
+            refresh: true
+

@@ -11,3 +11,11 @@ spring:
         file-extension: yaml
         enabled: true
         refresh-enabled: true
+        extension-configs:
+          - data-id: yyn-web.yaml
+            refresh: true
+        shared-configs:  # 共享配置
+          - data-id: shared-nacos.yaml
+            refresh: true
+          - data-id: shared-sentinel.yaml
+            refresh: true
