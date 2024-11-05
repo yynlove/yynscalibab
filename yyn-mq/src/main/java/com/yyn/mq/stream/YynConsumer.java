@@ -31,8 +31,11 @@ public class YynConsumer {
 
     @StreamListener(YynChannelBinder.ONE_TO_ONE_INPUT)
     public void receive(String messageBody) {
+
 //        throw new RuntimeException("我就是故意抛出一个异常");
         log.info(port + ">>> Receive1: 通过stream收到消息，messageBody = {}", messageBody);
+        //测试死信
+        int i = 1 / 0;
     }
 
 

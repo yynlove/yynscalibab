@@ -12,7 +12,7 @@ spring:
         enabled: true
         refresh-enabled: true
         extension-configs: # 指定多个 Data ID 文件
-          - data-id: yyn-kafka.yaml
+          - data-id: yyn-kafka-1.yaml
             refresh: true
         shared-configs:  # 共享配置
           - data-id: shared-db-config.yaml
