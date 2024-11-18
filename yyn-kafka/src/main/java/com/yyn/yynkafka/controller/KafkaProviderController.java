@@ -19,13 +19,25 @@ import javax.annotation.Resource;
 @Transactional(rollbackFor = RuntimeException.class)
 public class KafkaProviderController {
 
+    @Value("${test_batch_topic.topic}")
+    private String test_batch_topic;
 
+    @Value("${test_single_topic.topic}")
+    private String test_single_topic;
     @Resource
     private KafkaTemplate<Object, Object>  kafkaTemplate;
 
+    @GetMapping("/sendBatch/{message}")
+    public String sendBatch(@PathVariable("message") String message) {
+        for (int i=0;i<25;i++){
+            ListenableFuture<SendResult<Object, Object>> testTopic = kafkaTemplate.send(test_batch_topic, message);
+        }
+        return "true";
+    }
+
     @GetMapping("/send/{message}")
-    public String sendMultiple(@PathVariable("message") String message) {
-        ListenableFuture<SendResult<Object, Object>> testTopic = kafkaTemplate.send("test_topic", message);
+    public String send(@PathVariable("message") String message) {
+        ListenableFuture<SendResult<Object, Object>> testTopic = kafkaTemplate.send(test_single_topic, message);
         return JSON.toJSONString(testTopic);
     }
 }

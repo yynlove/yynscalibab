@@ -14,5 +14,6 @@
 
 
 
-# 其他文档链接
+# 文档链接
 -  [详解RocketMq](./README-rocketMq.md)
+-  [详解kafka](./README-kafka.md)

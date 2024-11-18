@@ -19,12 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootConfiguration
-public class KafkaConsumerConfig {
+public class KafkaBatchConsumerConfig {
 
     @Value("${spring.kafka.consumer.bootstrap-servers}")
     private String bootstrapServers;
-    @Value("${spring.kafka.consumer.group-id}")
-    private String groupId;
+
     @Value("${spring.kafka.consumer.enable-auto-commit}")
     private boolean enableAutoCommit;
     @Value("${spring.kafka.properties.session.timeout.ms}")
@@ -42,8 +41,11 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.listener.poll-timeout}")
     private long pollTimeout;
 
-    @Bean
-    public Map<String, Object> consumerConfigs() {
+    @Value("${test_batch_topic.group}")
+    private String groupId;
+
+    @Bean(name = "batchConsumerConfigs")
+    public Map<String, Object> batchConsumerConfigs() {
         Map<String, Object> propsMap = new HashMap<>(16);
         propsMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -82,19 +84,18 @@ public class KafkaConsumerConfig {
         return propsMap;
     }
 
-    @Bean
-    public ConsumerFactory<Object, Object> consumerFactory() {
+    public ConsumerFactory<Object, Object> batchConsumerFactory() {
         //配置消费者的 Json 反序列化的可信赖包，反序列化实体类需要
         try(JsonDeserializer<Object> deserializer = new JsonDeserializer<>()) {
             deserializer.trustedPackages("*");
-            return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new JsonDeserializer<>(), deserializer);
+            return new DefaultKafkaConsumerFactory<>(batchConsumerConfigs(), new JsonDeserializer<>(), deserializer);
         }
     }
 
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>> kafkaListenerContainerFactory() {
+    @Bean(name = "batchKafkaListenerContainerFactory")
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>> batchKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(batchConsumerFactory());
         //在侦听器容器中运行的线程数，一般设置为 机器数*分区数
         factory.setConcurrency(concurrency);
         //消费监听接口监听的主题不存在时，默认会报错，所以设置为false忽略错误
