@@ -224,8 +224,22 @@ Broker启动时会加载这个文件，并写入到一个双层Map（ConsumerOff
           one-to-one-output:
             producer:
               group: test # 生产者分组
-              sync: true # 是否同步发送消息，默认为 false 异步。              
-              delay-level-when-next-consume: -1 # 异步消费消息模式下消费失败重试策略，默认为 brocker 0  1-consumer控制 -1 直接进入死信
+              sync: true # 是否同步发送消息，默认为 false 异步。
+```
+
+### 消息重试 / 发送死信消息
+```yaml
+# 关闭spring cloud stream 重试 
+consumer:
+  max-attempts: 1
+# rocketmq:
+  consumer:
+   push:
+     maxReconsumeTimes: 2   # 最大延迟消费等级 ;
+     delayLevelWhenNextConsume: -1  # -1 消费失败发送DLQ 异步消费消息模式下消费失败重试策略，默认为 brocker 0  1-consumer控制 -1 直接进入死信
+ 
+
+
 ```
 
 ### 消息广播

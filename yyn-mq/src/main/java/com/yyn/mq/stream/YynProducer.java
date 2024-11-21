@@ -27,7 +27,7 @@ public class YynProducer {
         log.info("YynProducer sendOneToOneChannelMessage {}",message);
         Message<String> build = MessageBuilder.withPayload(message)
                 //设置消息延迟级别
-                .setHeader(MessageConst.PROPERTY_DELAY_TIME_LEVEL, "2")
+//                .setHeader(MessageConst.PROPERTY_DELAY_TIME_LEVEL, "2")
                 .build();
         yynChannelBinder.sendOneToOneChannel().send(build);
     }
